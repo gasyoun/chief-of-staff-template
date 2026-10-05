@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Бриф Chief of Staff — {DATE}</title>
+<style>
+  /* Фирменный шрифт: Charis (Charis SIL); запас — Georgia, serif */
+  body { font-family: "Charis", "Charis SIL", Georgia, serif; max-width: 860px;
+         margin: 2rem auto; padding: 0 1.2rem; line-height: 1.55; color: #1a1a1a; }
+  h1 { font-size: 1.5rem; border-bottom: 2px solid #b8860b; padding-bottom: .3rem; }
+  h2 { font-size: 1.1rem; color: #6b4f1d; margin-top: 1.6rem; }
+  /* eli5-слой: один пункт — одна строка; подпись картинки ≤15 слов; жаргон — глосса на месте */
+  .cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: .6rem; margin: 1rem 0; }
+  .card { border: 1px solid #d8d2c4; border-radius: 6px; padding: .55rem .7rem; background: #faf6ec; }
+  .card .n { font-size: 1.7rem; font-weight: bold; color: #8b0000; line-height: 1.15; }
+  .card.ok .n { color: #2e8b57; }
+  .card.warn .n { color: #b8860b; }
+  .card .t { font-size: .8rem; color: #555; }
+  .gloss { color: #777; font-size: .85rem; margin: .2rem 0 0; }
+  table { border-collapse: collapse; width: 100%; font-size: .95rem; }
+  td, th { border: 1px solid #d8d2c4; padding: .35rem .55rem; text-align: left; }
+  th { background: #f5efe2; }
+  .num { color: #8b0000; font-weight: bold; }
+  .ok { color: #2e8b57; } .warn { color: #b8860b; } .bad { color: #8b0000; }
+  .meta { color: #777; font-size: .85rem; }
+  li { margin: .3rem 0; }
+  svg text { font-family: "Charis", "Charis SIL", Georgia, serif; }
+  footer { margin-top: 2.5rem; font-style: italic; color: #999; font-size: .8rem; text-align: center; }
+  @media (max-width: 640px) { .cards { grid-template-columns: repeat(2, 1fr); } }
+</style>
+</head>
+<body>
+<h1>Бриф Chief of Staff — {DATE}</h1>
+<p class="meta">Собрано {TIME} · за {MINUTES} мин · источники: <a href="{SRC_SOURCES}">me/sources.md</a> · полная выкладка: <a href="{SRC_MD}">.md</a></p>
+
+<!--
+  ПРАВИЛА ЗАПОЛНЕНИЯ (решение 03-10, вечер — eli5-бриф):
+  1. Табло: 3-4 карточки-цифры, каждая со ссылкой-пруфом. Классы: bad (красное), warn, ok.
+  2. Неделя: SVG-лента вместо текстовых «Дедлайнов недели». Переставь даты/маркеры,
+     шаг ~60px/день от x=40; подписи чередуй над/под линией. Подпись ≤15 слов.
+  3. Один пункт = одна строка; полная выкладка уходит в .md-сиблинг.
+  4. Каждый факт — ссылка на пруф: запушенное → полный blob URL на GitHub,
+     локальное → file://-путь. Нет известной цели — ссылки нет (не выдумывать).
+  5. Жаргон при первом употреблении — глосса в скобках (класс gloss, ≤6 слов).
+  6. Финальный проход: sokratil (резать втрое). Черновики не отправляются.
+-->
+
+<h2>Табло дня</h2>
+<div class="cards">
+  <div class="card"><div class="n">{N1}</div><div class="t">{T1} <a href="{L1}">пруф ↗</a></div></div>
+  <div class="card warn"><div class="n">{N2}</div><div class="t">{T2} <a href="{L2}">пруф ↗</a></div></div>
+  <div class="card ok"><div class="n">{N3}</div><div class="t">{T3} <a href="{L3}">пруф ↗</a></div></div>
+  <div class="card"><div class="n">{N4}</div><div class="t">{T4} <a href="{L4}">пруф ↗</a></div></div>
+</div>
+
+<h2>Неделя</h2>
+<!-- Лента дедлайнов: линия y=70, x=40..760; точка = день, подпись = событие (≤4 слов на строку) -->
+<svg viewBox="0 0 800 112" role="img" aria-label="Лента дедлайнов недели">
+  <line x1="40" y1="70" x2="760" y2="70" stroke="#b8860b" stroke-width="2"/>
+  {WEEK_MARKERS}
+</svg>
+<p class="gloss">{WEEK_CAPTION}</p>
+
+<h2>Сегодня главное</h2>
+<ol>
+  <li>{TOP1}</li>
+  <li>{TOP2}</li>
+  <li>{TOP3}</li>
+</ol>
+
+<h2>Волна: план/факт</h2>
+<!-- Шкала 0..10 юнитов: x = 40 + 72·юниты; зона минимума 5–10 — светло-зелёная полоса (пол, не план — MG 04-10); факт — точка -->
+<svg viewBox="0 0 800 96" role="img" aria-label="План и факт ночной волны">
+  <rect x="400" y="54" width="360" height="14" fill="#2e8b57" opacity="0.15"/>
+  <line x1="40" y1="61" x2="760" y2="61" stroke="#d8d2c4" stroke-width="2"/>
+  <text x="40" y="82" font-size="12" fill="#777">0</text>
+  <text x="396" y="82" font-size="12" fill="#777">5</text>
+  <text x="752" y="82" font-size="12" fill="#777">10</text>
+  {WAVE_FACT}
+</svg>
+<p class="gloss">{WAVE_CAPTION}</p>
+
+<h2>Сделано флотом за 24ч</h2>
+<!-- Закрытые юниты, артефакты, ремонты — НЕ аптайм. Максимум 3 пункта по строке. -->
+<ul>
+  <li>{DONE1}</li>
+  <li>{DONE2}</li>
+  <li>{DONE3}</li>
+</ul>
+
+<h2>Черновики напоминаний</h2>
+<!-- Готовый текст для копирования; не отправлять. -->
+<p>{REMINDERS}</p>
+
+<h2>Решения, которые ждут</h2>
+<table>
+  <tr><th>Решение</th><th>Владелец</th><th>С</th></tr>
+  {DECISIONS_ROWS}
+</table>
+
+<h2>Просроченные ожидания</h2>
+<p>{OVERDUE}</p>
+
+<h2>Новое за ночь</h2>
+<p>{OVERNIGHT}</p>
+
+<h2>Прочитать позже</h2>
+<p>{READLATER}</p>
+
+<footer>Chief of Staff · собрано агентом, правь смело · черновики не отправляются</footer>
+</body>
+</html>
